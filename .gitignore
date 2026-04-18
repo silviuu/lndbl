@@ -1,0 +1,25 @@
+# Dependencies
+/vendor/
+
+# IDE - PhpStorm
+/.idea/
+
+# Claude Code
+/.claude/
+
+# PHP CS Fixer cache
+/.php-cs-fixer.cache
+/.php_cs.cache
+
+# PHPUnit cache/coverage
+/.phpunit.result.cache
+/.phpunit.cache/
+/coverage/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
