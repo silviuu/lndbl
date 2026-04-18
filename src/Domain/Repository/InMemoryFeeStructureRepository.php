@@ -6,6 +6,7 @@ namespace LoanFeeCalculator\Domain\Repository;
 
 use LoanFeeCalculator\Domain\Enum\Term;
 use LoanFeeCalculator\Domain\Model\FeeBreakpoint;
+use LoanFeeCalculator\Domain\ValueObject\Money;
 use LoanFeeCalculator\Provider\FeeStructureProviderInterface;
 
 final class InMemoryFeeStructureRepository implements FeeStructureProviderInterface
@@ -64,7 +65,10 @@ final class InMemoryFeeStructureRepository implements FeeStructureProviderInterf
         $data = self::BREAKPOINTS[$term->value];
 
         return array_map(
-            static fn (int $amount, float $fee) => new FeeBreakpoint((float) $amount, $fee),
+            static fn (int $amount, float $fee) => new FeeBreakpoint(
+                Money::fromFloat((float) $amount),
+                Money::fromFloat($fee),
+            ),
             array_keys($data),
             array_values($data),
         );

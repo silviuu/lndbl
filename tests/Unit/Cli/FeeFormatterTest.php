@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LoanFeeCalculator\Tests\Unit\Cli;
 
 use LoanFeeCalculator\Cli\FeeFormatter;
+use LoanFeeCalculator\Domain\ValueObject\Money;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -22,7 +23,7 @@ final class FeeFormatterTest extends TestCase
     #[DataProvider('formatProvider')]
     public function formatReturnsFormattedString(float $fee, string $expected): void
     {
-        $this->assertSame($expected, $this->formatter->format($fee));
+        $this->assertSame($expected, $this->formatter->format(Money::fromFloat($fee)));
     }
 
     /** @return iterable<string, array{float, string}> */

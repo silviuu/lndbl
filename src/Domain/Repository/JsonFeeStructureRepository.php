@@ -6,6 +6,7 @@ namespace LoanFeeCalculator\Domain\Repository;
 
 use LoanFeeCalculator\Domain\Enum\Term;
 use LoanFeeCalculator\Domain\Model\FeeBreakpoint;
+use LoanFeeCalculator\Domain\ValueObject\Money;
 use LoanFeeCalculator\Provider\FeeStructureProviderInterface;
 
 final class JsonFeeStructureRepository implements FeeStructureProviderInterface
@@ -37,7 +38,10 @@ final class JsonFeeStructureRepository implements FeeStructureProviderInterface
 
         $breakpoints = [];
         foreach ($this->data[$key] as $amount => $fee) {
-            $breakpoints[] = new FeeBreakpoint((float) $amount, $fee);
+            $breakpoints[] = new FeeBreakpoint(
+                Money::fromFloat((float) $amount),
+                Money::fromFloat((float) $fee),
+            );
         }
 
         return $breakpoints;

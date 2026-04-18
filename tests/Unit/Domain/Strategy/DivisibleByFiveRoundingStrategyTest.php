@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LoanFeeCalculator\Tests\Unit\Domain\Strategy;
 
 use LoanFeeCalculator\Domain\Strategy\DivisibleByFiveRoundingStrategy;
+use LoanFeeCalculator\Domain\ValueObject\Money;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -22,8 +23,8 @@ final class DivisibleByFiveRoundingStrategyTest extends TestCase
     #[DataProvider('roundingProvider')]
     public function roundsCorrectly(float $fee, float $loanAmount, float $expected): void
     {
-        $result = $this->strategy->round($fee, $loanAmount);
-        $this->assertSame($expected, $result);
+        $result = $this->strategy->round(Money::fromFloat($fee), Money::fromFloat($loanAmount));
+        $this->assertSame($expected, $result->toFloat());
     }
 
     /** @return iterable<string, array{float, float, float}> */

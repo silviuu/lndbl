@@ -8,6 +8,7 @@ use LoanFeeCalculator\Domain\Model\FeeBreakpoint;
 use LoanFeeCalculator\Domain\Strategy\InterpolationStrategyInterface;
 use LoanFeeCalculator\Domain\Strategy\RoundingStrategyInterface;
 use LoanFeeCalculator\Domain\ValueObject\LoanApplication;
+use LoanFeeCalculator\Domain\ValueObject\Money;
 use LoanFeeCalculator\Provider\FeeStructureProviderInterface;
 
 final readonly class FeeCalculator implements FeeCalculatorInterface
@@ -19,7 +20,7 @@ final readonly class FeeCalculator implements FeeCalculatorInterface
     ) {
     }
 
-    public function calculate(LoanApplication $application): float
+    public function calculate(LoanApplication $application): Money
     {
         $breakpoints = $this->provider->getBreakpointsForTerm($application->term);
         [$lower, $upper] = $this->findSurroundingBreakpoints($breakpoints, $application->amount);
@@ -33,31 +34,31 @@ final readonly class FeeCalculator implements FeeCalculatorInterface
      * @param FeeBreakpoint[] $breakpoints sorted ascending by amount
      * @return array{FeeBreakpoint, FeeBreakpoint}
      */
-    private function findSurroundingBreakpoints(array $breakpoints, float $amount): array
+    private function findSurroundingBreakpoints(array $breakpoints, Money $amount): array
     {
-        $low = 0;
-        $high = count($breakpoints) - 1;
+        $lowerIndex = 0;
+        $upperIndex = count($breakpoints) - 1;
 
         // Match for maximum and minimum amount, no interpolation needed
-        if ($amount <= $breakpoints[$low]->amount) {
-            return [$breakpoints[$low], $breakpoints[$low]];
+        if (!$amount->isGreaterThan($breakpoints[$lowerIndex]->amount)) {
+            return [$breakpoints[$lowerIndex], $breakpoints[$lowerIndex]];
         }
-        if ($amount >= $breakpoints[$high]->amount) {
-            return [$breakpoints[$high], $breakpoints[$high]];
+        if (!$amount->isLessThan($breakpoints[$upperIndex]->amount)) {
+            return [$breakpoints[$upperIndex], $breakpoints[$upperIndex]];
         }
 
-        // find the surrounding pair of breakpoints
+        // Find the surrounding pair of breakpoints via linear scan
         foreach ($breakpoints as $key => $breakpoint) {
-            if ($breakpoint->amount <= $amount) {
-                $low = $key;
+            if (!$breakpoint->amount->isGreaterThan($amount)) {
+                $lowerIndex = $key;
             }
 
-            if ($breakpoint->amount >= $amount) {
-                $high = $key;
+            if (!$breakpoint->amount->isLessThan($amount)) {
+                $upperIndex = $key;
                 break;
             }
         }
 
-        return [$breakpoints[$low], $breakpoints[$high]];
+        return [$breakpoints[$lowerIndex], $breakpoints[$upperIndex]];
     }
 }

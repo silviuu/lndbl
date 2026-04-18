@@ -6,6 +6,7 @@ namespace LoanFeeCalculator\Tests\Unit\Domain\Strategy;
 
 use LoanFeeCalculator\Domain\Model\FeeBreakpoint;
 use LoanFeeCalculator\Domain\Strategy\LinearInterpolationStrategy;
+use LoanFeeCalculator\Domain\ValueObject\Money;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -29,12 +30,12 @@ final class LinearInterpolationStrategyTest extends TestCase
         float $upperFee,
         float $expected,
     ): void {
-        $lower = new FeeBreakpoint($lowerAmt, $lowerFee);
-        $upper = new FeeBreakpoint($upperAmt, $upperFee);
+        $lower = new FeeBreakpoint(Money::fromFloat($lowerAmt), Money::fromFloat($lowerFee));
+        $upper = new FeeBreakpoint(Money::fromFloat($upperAmt), Money::fromFloat($upperFee));
 
-        $result = $this->strategy->interpolate($amount, $lower, $upper);
+        $result = $this->strategy->interpolate(Money::fromFloat($amount), $lower, $upper);
 
-        $this->assertEqualsWithDelta($expected, $result, 0.0001);
+        $this->assertEqualsWithDelta($expected, $result->toFloat(), 0.0001);
     }
 
     /** @return iterable<string, array{float, float, float, float, float, float}> */

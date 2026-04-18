@@ -7,6 +7,7 @@ namespace LoanFeeCalculator\Tests\Unit\Domain;
 use LoanFeeCalculator\Domain\AmountParser;
 use LoanFeeCalculator\Domain\Exception\AmountDecimalPrecisionException;
 use LoanFeeCalculator\Domain\Exception\NonNumericAmountException;
+use LoanFeeCalculator\Domain\ValueObject\Money;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -22,9 +23,11 @@ final class AmountParserTest extends TestCase
 
     #[Test]
     #[DataProvider('validAmountProvider')]
-    public function parseReturnsFloat(string $input, float $expected): void
+    public function parseReturnsMoney(string $input, float $expected): void
     {
-        $this->assertSame($expected, $this->parser->parse($input));
+        $result = $this->parser->parse($input);
+        $this->assertInstanceOf(Money::class, $result);
+        $this->assertSame($expected, $result->toFloat());
     }
 
     /** @return iterable<string, array{string, float}> */

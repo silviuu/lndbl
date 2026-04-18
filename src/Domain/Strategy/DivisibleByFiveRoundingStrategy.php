@@ -4,17 +4,21 @@ declare(strict_types=1);
 
 namespace LoanFeeCalculator\Domain\Strategy;
 
+use LoanFeeCalculator\Domain\ValueObject\Money;
+
 final class DivisibleByFiveRoundingStrategy implements RoundingStrategyInterface
 {
-    public function round(float $fee, float $loanAmount): float
-    {
-        $total = $loanAmount + $fee;
-        $remainder = fmod($total, 5);
+    private const int FIVE_POUNDS_IN_CENTS = 500;
 
-        if ($remainder > 0) {
-            $fee += (5 - $remainder);
+    public function round(Money $fee, Money $loanAmount): Money
+    {
+        $total     = $loanAmount->add($fee);
+        $remainder = $total->remainderOf(self::FIVE_POUNDS_IN_CENTS);
+
+        if ($remainder !== 0) {
+            $fee = $fee->addCents(self::FIVE_POUNDS_IN_CENTS - $remainder);
         }
 
-        return round($fee, 2);
+        return $fee;
     }
 }

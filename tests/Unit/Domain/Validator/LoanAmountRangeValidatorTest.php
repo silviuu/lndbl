@@ -6,6 +6,7 @@ namespace LoanFeeCalculator\Tests\Unit\Domain\Validator;
 
 use LoanFeeCalculator\Domain\Exception\InvalidLoanAmountException;
 use LoanFeeCalculator\Domain\Validator\LoanAmountRangeValidator;
+use LoanFeeCalculator\Domain\ValueObject\Money;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -26,7 +27,7 @@ final class LoanAmountRangeValidatorTest extends TestCase
     public function passesForValidAmount(float $amount): void
     {
         $this->expectNotToPerformAssertions();
-        $this->validator->validate($amount);
+        $this->validator->validate(Money::fromFloat($amount));
     }
 
     /** @return iterable<string, array{float}> */
@@ -45,7 +46,7 @@ final class LoanAmountRangeValidatorTest extends TestCase
     public function throwsForOutOfRangeAmount(float $amount): void
     {
         $this->expectException(InvalidLoanAmountException::class);
-        $this->validator->validate($amount);
+        $this->validator->validate(Money::fromFloat($amount));
     }
 
     /** @return iterable<string, array{float}> */

@@ -5,13 +5,20 @@ declare(strict_types=1);
 namespace LoanFeeCalculator\Domain\Validator;
 
 use LoanFeeCalculator\Domain\Exception\InvalidLoanAmountException;
+use LoanFeeCalculator\Domain\ValueObject\Money;
 
 final class LoanAmountRangeValidator
 {
-    public function validate(float $amount): void
+    private static Money $min;
+    private static Money $max;
+
+    public function validate(Money $amount): void
     {
-        if ($amount < 1_000 || $amount > 20_000) {
-            throw new InvalidLoanAmountException($amount);
+        self::$min ??= Money::fromFloat(1_000);
+        self::$max ??= Money::fromFloat(20_000);
+
+        if ($amount->isLessThan(self::$min) || $amount->isGreaterThan(self::$max)) {
+            throw new InvalidLoanAmountException($amount->toFloat());
         }
     }
 }

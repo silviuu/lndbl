@@ -8,6 +8,7 @@ use LoanFeeCalculator\Application\FeeCalculatorInterface;
 use LoanFeeCalculator\Cli\CalculateFeeCommand;
 use LoanFeeCalculator\Cli\FeeFormatter;
 use LoanFeeCalculator\Domain\AmountParser;
+use LoanFeeCalculator\Domain\ValueObject\Money;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -23,7 +24,7 @@ final class CalculateFeeCommandTest extends TestCase
     protected function setUp(): void
     {
         $this->calculator = $this->createStub(FeeCalculatorInterface::class);
-        $this->calculator->method('calculate')->willReturn(100.0);
+        $this->calculator->method('calculate')->willReturn(Money::fromFloat(100.0));
 
         $stdout = fopen('php://memory', 'r+');
         $stderr = fopen('php://memory', 'r+');

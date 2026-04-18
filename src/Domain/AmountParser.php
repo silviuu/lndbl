@@ -6,6 +6,7 @@ namespace LoanFeeCalculator\Domain;
 
 use LoanFeeCalculator\Domain\Validator\AmountDecimalPrecisionValidator;
 use LoanFeeCalculator\Domain\Validator\NumericAmountValidator;
+use LoanFeeCalculator\Domain\ValueObject\Money;
 
 final class AmountParser
 {
@@ -15,13 +16,13 @@ final class AmountParser
     ) {
     }
 
-    public function parse(string $input): float
+    public function parse(string $input): Money
     {
         $cleaned = str_replace(',', '', trim($input));
 
         $this->numericAmountValidator->validate($input, $cleaned);
         $this->decimalPrecisionValidator->validate($input, $cleaned);
 
-        return (float) $cleaned;
+        return Money::fromFloat((float) $cleaned);
     }
 }

@@ -5,20 +5,35 @@ declare(strict_types=1);
 namespace LoanFeeCalculator\Domain\Strategy;
 
 use LoanFeeCalculator\Domain\Model\FeeBreakpoint;
+use LoanFeeCalculator\Domain\ValueObject\Money;
 
 final class LinearInterpolationStrategy implements InterpolationStrategyInterface
 {
-    public function interpolate(float $amount, FeeBreakpoint $lower, FeeBreakpoint $upper): float
+    public function interpolate(Money $amount, FeeBreakpoint $lower, FeeBreakpoint $upper): Money
     {
-        if ($lower->amount === $upper->amount) {
-            //no interpolation needed, return lower fee
+        if ($lower->amount->equals($upper->amount)) {
             return $lower->fee;
         }
 
-        //calculate ratio
-        $ratio = ($amount - $lower->amount) / ($upper->amount - $lower->amount);
+        // All arithmetic is done in integer cents via bcmath to avoid float precision loss
+        $amountCents   = (string) $amount->cents();
+        $lowerCents    = (string) $lower->amount->cents();
+        $upperCents    = (string) $upper->amount->cents();
+        $lowerFeeCents = (string) $lower->fee->cents();
+        $upperFeeCents = (string) $upper->fee->cents();
 
-        //use ratio to calculate fee
-        return $lower->fee + $ratio * ($upper->fee - $lower->fee);
+        $ratio = bcdiv(
+            bcsub($amountCents, $lowerCents, 10),
+            bcsub($upperCents, $lowerCents, 10),
+            10,
+        );
+
+        $feeCents = bcadd(
+            $lowerFeeCents,
+            bcmul($ratio, bcsub($upperFeeCents, $lowerFeeCents, 10), 10),
+            10,
+        );
+
+        return Money::ofCents((int) round((float) $feeCents));
     }
 }

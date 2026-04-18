@@ -10,6 +10,7 @@ use LoanFeeCalculator\Domain\Repository\InMemoryFeeStructureRepository;
 use LoanFeeCalculator\Domain\Strategy\DivisibleByFiveRoundingStrategy;
 use LoanFeeCalculator\Domain\Strategy\LinearInterpolationStrategy;
 use LoanFeeCalculator\Domain\ValueObject\LoanApplication;
+use LoanFeeCalculator\Domain\ValueObject\Money;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -31,9 +32,9 @@ final class FeeCalculatorTest extends TestCase
     #[DataProvider('feeCalculationProvider')]
     public function calculatesCorrectFee(float $amount, Term $term, float $expectedFee): void
     {
-        $application = new LoanApplication($amount, $term);
+        $application = new LoanApplication(Money::fromFloat($amount), $term);
         $fee = $this->calculator->calculate($application);
-        $this->assertSame($expectedFee, $fee);
+        $this->assertSame($expectedFee, $fee->toFloat());
     }
 
     /** @return iterable<string, array{float, Term, float}> */

@@ -40,8 +40,8 @@ final class InMemoryFeeStructureRepositoryTest extends TestCase
 
         for ($i = 1; $i < count($breakpoints); $i++) {
             $this->assertGreaterThan(
-                $breakpoints[$i - 1]->amount,
-                $breakpoints[$i]->amount,
+                $breakpoints[$i - 1]->amount->cents(),
+                $breakpoints[$i]->amount->cents(),
             );
         }
     }
@@ -57,8 +57,8 @@ final class InMemoryFeeStructureRepositoryTest extends TestCase
     public function term24FirstBreakpointIs1000(): void
     {
         $breakpoints = $this->repository->getBreakpointsForTerm(Term::TwentyFour);
-        $this->assertSame(1000.0, $breakpoints[0]->amount);
-        $this->assertSame(70.0, $breakpoints[0]->fee);
+        $this->assertSame(1000.0, $breakpoints[0]->amount->toFloat());
+        $this->assertSame(70.0, $breakpoints[0]->fee->toFloat());
     }
 
     #[Test]
@@ -66,16 +66,16 @@ final class InMemoryFeeStructureRepositoryTest extends TestCase
     {
         $breakpoints = $this->repository->getBreakpointsForTerm(Term::TwentyFour);
         $last = $breakpoints[array_key_last($breakpoints)];
-        $this->assertSame(20000.0, $last->amount);
-        $this->assertSame(800.0, $last->fee);
+        $this->assertSame(20000.0, $last->amount->toFloat());
+        $this->assertSame(800.0, $last->fee->toFloat());
     }
 
     #[Test]
     public function term12FirstBreakpointIs1000(): void
     {
         $breakpoints = $this->repository->getBreakpointsForTerm(Term::Twelve);
-        $this->assertSame(1000.0, $breakpoints[0]->amount);
-        $this->assertSame(50.0, $breakpoints[0]->fee);
+        $this->assertSame(1000.0, $breakpoints[0]->amount->toFloat());
+        $this->assertSame(50.0, $breakpoints[0]->fee->toFloat());
     }
 
     #[Test]
@@ -83,8 +83,8 @@ final class InMemoryFeeStructureRepositoryTest extends TestCase
     {
         $breakpoints = $this->repository->getBreakpointsForTerm(Term::Twelve);
         $last = $breakpoints[array_key_last($breakpoints)];
-        $this->assertSame(20000.0, $last->amount);
-        $this->assertSame(400.0, $last->fee);
+        $this->assertSame(20000.0, $last->amount->toFloat());
+        $this->assertSame(400.0, $last->fee->toFloat());
     }
 
     #[Test]
@@ -92,7 +92,7 @@ final class InMemoryFeeStructureRepositoryTest extends TestCase
     {
         foreach (Term::cases() as $term) {
             foreach ($this->repository->getBreakpointsForTerm($term) as $bp) {
-                $this->assertGreaterThan(0, $bp->fee, "Fee at amount {$bp->amount} must be positive");
+                $this->assertGreaterThan(0, $bp->fee->toFloat(), "Fee at amount {$bp->amount->toFloat()} must be positive");
             }
         }
     }
@@ -102,7 +102,7 @@ final class InMemoryFeeStructureRepositoryTest extends TestCase
     {
         $breakpoints = $this->repository->getBreakpointsForTerm(Term::TwentyFour);
         for ($i = 1; $i < count($breakpoints); $i++) {
-            $this->assertGreaterThan($breakpoints[$i - 1]->amount, $breakpoints[$i]->amount);
+            $this->assertGreaterThan($breakpoints[$i - 1]->amount->cents(), $breakpoints[$i]->amount->cents());
         }
     }
 }

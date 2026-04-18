@@ -62,9 +62,9 @@ final class CalculateFeeCommand
             $fee = $this->calculator->calculate($application);
 
             $this->logger->info('Fee calculated', [
-                'amount' => $amount,
+                'amount' => $amount->toFloat(),
                 'term'   => $term->value,
-                'fee'    => $fee,
+                'fee'    => $fee->toFloat(),
             ]);
 
             fwrite($this->stdout, $this->feeFormatter->format($fee) . "\n");
