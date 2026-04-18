@@ -1,0 +1,11 @@
+parameters:
+    level: 8
+    paths:
+        - src
+        - tests
+    tmpDir: var/phpstan
+
+    treatPhpDocTypesAsCertain: false
+
+includes:
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon

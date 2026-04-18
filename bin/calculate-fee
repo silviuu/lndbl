@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use DI\ContainerBuilder;
+use LoanFeeCalculator\Cli\CalculateFeeCommand;
+
+$builder = new ContainerBuilder();
+$builder->addDefinitions(__DIR__ . '/../config/container.php');
+$container = $builder->build();
+
+$command = $container->get(CalculateFeeCommand::class);
+
+exit($command->run($argv));
