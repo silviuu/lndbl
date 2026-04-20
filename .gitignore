@@ -16,6 +16,9 @@
 /.phpunit.cache/
 /coverage/
 
+# Runtime
+/var/
+
 # OS
 .DS_Store
 Thumbs.db

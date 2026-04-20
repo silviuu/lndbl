@@ -20,7 +20,7 @@ final readonly class Money
 
     public function add(self $other): self
     {
-        return new self($this->cents + $other->cents);
+        return $this->addCents($other->cents);
     }
 
     public function addCents(int $cents): self

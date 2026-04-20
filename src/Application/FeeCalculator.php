@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace LoanFeeCalculator\Application;
 
+use LoanFeeCalculator\Domain\Model\BreakpointPair;
 use LoanFeeCalculator\Domain\Model\FeeBreakpoint;
 use LoanFeeCalculator\Domain\Strategy\InterpolationStrategyInterface;
 use LoanFeeCalculator\Domain\Strategy\RoundingStrategyInterface;
 use LoanFeeCalculator\Domain\ValueObject\LoanApplication;
 use LoanFeeCalculator\Domain\ValueObject\Money;
-use LoanFeeCalculator\Provider\FeeStructureProviderInterface;
+use LoanFeeCalculator\Domain\Repository\FeeStructureProviderInterface;
 
 final readonly class FeeCalculator implements FeeCalculatorInterface
 {
@@ -23,28 +24,27 @@ final readonly class FeeCalculator implements FeeCalculatorInterface
     public function calculate(LoanApplication $application): Money
     {
         $breakpoints = $this->provider->getBreakpointsForTerm($application->term);
-        [$lower, $upper] = $this->findSurroundingBreakpoints($breakpoints, $application->amount);
+        $pair = $this->findSurroundingBreakpoints($breakpoints, $application->amount);
 
-        $fee = $this->interpolation->interpolate($application->amount, $lower, $upper);
+        $fee = $this->interpolation->interpolate($application->amount, $pair->lower, $pair->upper);
 
         return $this->rounding->round($fee, $application->amount);
     }
 
     /**
      * @param FeeBreakpoint[] $breakpoints sorted ascending by amount
-     * @return array{FeeBreakpoint, FeeBreakpoint}
      */
-    private function findSurroundingBreakpoints(array $breakpoints, Money $amount): array
+    private function findSurroundingBreakpoints(array $breakpoints, Money $amount): BreakpointPair
     {
         $lowerIndex = 0;
         $upperIndex = count($breakpoints) - 1;
 
         // Match for maximum and minimum amount, no interpolation needed
         if (!$amount->isGreaterThan($breakpoints[$lowerIndex]->amount)) {
-            return [$breakpoints[$lowerIndex], $breakpoints[$lowerIndex]];
+            return new BreakpointPair($breakpoints[$lowerIndex], $breakpoints[$lowerIndex]);
         }
         if (!$amount->isLessThan($breakpoints[$upperIndex]->amount)) {
-            return [$breakpoints[$upperIndex], $breakpoints[$upperIndex]];
+            return new BreakpointPair($breakpoints[$upperIndex], $breakpoints[$upperIndex]);
         }
 
         // Find the surrounding pair of breakpoints via linear scan
@@ -59,6 +59,6 @@ final readonly class FeeCalculator implements FeeCalculatorInterface
             }
         }
 
-        return [$breakpoints[$lowerIndex], $breakpoints[$upperIndex]];
+        return new BreakpointPair($breakpoints[$lowerIndex], $breakpoints[$upperIndex]);
     }
 }

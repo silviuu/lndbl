@@ -7,7 +7,7 @@ namespace LoanFeeCalculator\Tests\Unit\Cli;
 use LoanFeeCalculator\Application\FeeCalculatorInterface;
 use LoanFeeCalculator\Cli\CalculateFeeCommand;
 use LoanFeeCalculator\Cli\FeeFormatter;
-use LoanFeeCalculator\Domain\AmountParser;
+use LoanFeeCalculator\Application\Utility\AmountParser;
 use LoanFeeCalculator\Domain\ValueObject\Money;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;

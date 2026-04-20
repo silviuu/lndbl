@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LoanFeeCalculator\Tests\Unit\Domain\Strategy;
 
 use LoanFeeCalculator\Domain\Model\FeeBreakpoint;
-use LoanFeeCalculator\Domain\Strategy\LinearInterpolationStrategy;
+use LoanFeeCalculator\Infrastructure\Strategy\LinearInterpolationStrategy;
 use LoanFeeCalculator\Domain\ValueObject\Money;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;

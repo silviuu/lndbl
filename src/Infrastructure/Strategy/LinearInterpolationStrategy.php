@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LoanFeeCalculator\Domain\Strategy;
+namespace LoanFeeCalculator\Infrastructure\Strategy;
 
 use LoanFeeCalculator\Domain\Model\FeeBreakpoint;
+use LoanFeeCalculator\Domain\Strategy\InterpolationStrategyInterface;
 use LoanFeeCalculator\Domain\ValueObject\Money;
 
 final class LinearInterpolationStrategy implements InterpolationStrategyInterface

@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LoanFeeCalculator\Domain\Strategy;
+namespace LoanFeeCalculator\Infrastructure\Strategy;
 
+use LoanFeeCalculator\Domain\Strategy\RoundingStrategyInterface;
 use LoanFeeCalculator\Domain\ValueObject\Money;
 
 final class DivisibleByFiveRoundingStrategy implements RoundingStrategyInterface

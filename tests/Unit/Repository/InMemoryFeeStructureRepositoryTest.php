@@ -6,7 +6,7 @@ namespace LoanFeeCalculator\Tests\Unit\Domain\Repository;
 
 use LoanFeeCalculator\Domain\Enum\Term;
 use LoanFeeCalculator\Domain\Model\FeeBreakpoint;
-use LoanFeeCalculator\Domain\Repository\InMemoryFeeStructureRepository;
+use LoanFeeCalculator\Infrastructure\Persistence\InMemoryFeeStructureRepository;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace LoanFeeCalculator\Domain\Repository;
+namespace LoanFeeCalculator\Infrastructure\Persistence;
 
 use LoanFeeCalculator\Domain\Enum\Term;
 use LoanFeeCalculator\Domain\Model\FeeBreakpoint;
 use LoanFeeCalculator\Domain\ValueObject\Money;
-use LoanFeeCalculator\Provider\FeeStructureProviderInterface;
+use LoanFeeCalculator\Domain\Repository\FeeStructureProviderInterface;
 
 final class InMemoryFeeStructureRepository implements FeeStructureProviderInterface
 {

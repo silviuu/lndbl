@@ -6,9 +6,9 @@ namespace LoanFeeCalculator\Tests\Unit\Application;
 
 use LoanFeeCalculator\Application\FeeCalculator;
 use LoanFeeCalculator\Domain\Enum\Term;
-use LoanFeeCalculator\Domain\Repository\InMemoryFeeStructureRepository;
-use LoanFeeCalculator\Domain\Strategy\DivisibleByFiveRoundingStrategy;
-use LoanFeeCalculator\Domain\Strategy\LinearInterpolationStrategy;
+use LoanFeeCalculator\Infrastructure\Persistence\InMemoryFeeStructureRepository;
+use LoanFeeCalculator\Infrastructure\Strategy\DivisibleByFiveRoundingStrategy;
+use LoanFeeCalculator\Infrastructure\Strategy\LinearInterpolationStrategy;
 use LoanFeeCalculator\Domain\ValueObject\LoanApplication;
 use LoanFeeCalculator\Domain\ValueObject\Money;
 use PHPUnit\Framework\Attributes\DataProvider;

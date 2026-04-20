@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace LoanFeeCalculator\Domain\Repository;
+namespace LoanFeeCalculator\Infrastructure\Persistence;
 
-use LoanFeeCalculator\Domain\Enum\Term;
 use LoanFeeCalculator\Domain\Model\FeeBreakpoint;
+use LoanFeeCalculator\Domain\Enum\Term;
 use LoanFeeCalculator\Domain\ValueObject\Money;
-use LoanFeeCalculator\Provider\FeeStructureProviderInterface;
+use LoanFeeCalculator\Domain\Repository\FeeStructureProviderInterface;
 
 final class JsonFeeStructureRepository implements FeeStructureProviderInterface
 {
@@ -16,11 +16,11 @@ final class JsonFeeStructureRepository implements FeeStructureProviderInterface
 
     public function __construct(string $path)
     {
-        $json = @file_get_contents($path);
-
-        if ($json === false) {
+        if (!file_exists($path) || !is_readable($path)) {
             throw new \RuntimeException("Cannot read fee structure file: {$path}");
         }
+
+        $json = file_get_contents($path);
 
         /** @var array<string, array<string, float>> $decoded */
         $decoded = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
@@ -43,6 +43,8 @@ final class JsonFeeStructureRepository implements FeeStructureProviderInterface
                 Money::fromFloat((float) $fee),
             );
         }
+
+        usort($breakpoints, static fn(FeeBreakpoint $a, FeeBreakpoint $b) => $a->amount->isGreaterThan($b->amount) ? 1 : -1);
 
         return $breakpoints;
     }

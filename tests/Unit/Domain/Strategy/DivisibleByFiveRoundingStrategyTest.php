@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LoanFeeCalculator\Tests\Unit\Domain\Strategy;
 
-use LoanFeeCalculator\Domain\Strategy\DivisibleByFiveRoundingStrategy;
+use LoanFeeCalculator\Infrastructure\Strategy\DivisibleByFiveRoundingStrategy;
 use LoanFeeCalculator\Domain\ValueObject\Money;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;

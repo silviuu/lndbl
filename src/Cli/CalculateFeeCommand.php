@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LoanFeeCalculator\Cli;
 
 use LoanFeeCalculator\Application\FeeCalculatorInterface;
-use LoanFeeCalculator\Domain\AmountParser;
+use LoanFeeCalculator\Application\Utility\AmountParser;
 use LoanFeeCalculator\Domain\Enum\Term;
 use LoanFeeCalculator\Domain\ValueObject\LoanApplication;
 use Psr\Log\LoggerInterface;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LoanFeeCalculator\Domain;
+namespace LoanFeeCalculator\Application\Utility;
 
 use LoanFeeCalculator\Domain\Validator\AmountDecimalPrecisionValidator;
 use LoanFeeCalculator\Domain\Validator\NumericAmountValidator;

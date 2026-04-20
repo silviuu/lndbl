@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LoanFeeCalculator\Provider;
+namespace LoanFeeCalculator\Domain\Repository;
 
 use LoanFeeCalculator\Domain\Enum\Term;
 use LoanFeeCalculator\Domain\Model\FeeBreakpoint;

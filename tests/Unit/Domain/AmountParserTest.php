@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LoanFeeCalculator\Tests\Unit\Domain;
 
-use LoanFeeCalculator\Domain\AmountParser;
+use LoanFeeCalculator\Application\Utility\AmountParser;
 use LoanFeeCalculator\Domain\Exception\AmountDecimalPrecisionException;
 use LoanFeeCalculator\Domain\Exception\NonNumericAmountException;
 use LoanFeeCalculator\Domain\ValueObject\Money;

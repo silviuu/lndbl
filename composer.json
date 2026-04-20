@@ -4,6 +4,7 @@
     "type": "project",
     "require": {
         "php": ">=8.4",
+        "ext-bcmath": "*",
         "php-di/php-di": "^7.0",
         "monolog/monolog": "^3.10",
         "psr/log": "^3.0"
